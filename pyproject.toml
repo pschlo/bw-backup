@@ -12,7 +12,7 @@ description = "Back up a Bitwarden vault, including attachments"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-  "pywarden @ git+https://github.com/pschlo/pywarden.git@7e47a658653e6f971bc357d1c4ccc2e4efbec183",
+  "pywarden @ git+https://github.com/pschlo/pywarden.git",
 ]
 
 [project.scripts]

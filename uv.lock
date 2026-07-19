@@ -17,7 +17,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "pywarden", git = "https://github.com/pschlo/pywarden.git?rev=7e47a658653e6f971bc357d1c4ccc2e4efbec183" }]
+requires-dist = [{ name = "pywarden", git = "https://github.com/pschlo/pywarden.git" }]
 
 [package.metadata.requires-dev]
 dev = [
@@ -208,7 +208,7 @@ wheels = [
 [[package]]
 name = "pywarden"
 version = "1.2.0"
-source = { git = "https://github.com/pschlo/pywarden.git?rev=7e47a658653e6f971bc357d1c4ccc2e4efbec183#7e47a658653e6f971bc357d1c4ccc2e4efbec183" }
+source = { git = "https://github.com/pschlo/pywarden.git#7e47a658653e6f971bc357d1c4ccc2e4efbec183" }
 dependencies = [
     { name = "requests" },
 ]
