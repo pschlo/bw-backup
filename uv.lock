@@ -17,7 +17,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "pywarden", git = "https://github.com/pschlo/pywarden.git" }]
+requires-dist = [{ name = "pywarden", url = "https://github.com/pschlo/pywarden/archive/refs/heads/main.zip" }]
 
 [package.metadata.requires-dev]
 dev = [
@@ -208,10 +208,14 @@ wheels = [
 [[package]]
 name = "pywarden"
 version = "1.2.0"
-source = { git = "https://github.com/pschlo/pywarden.git#7e47a658653e6f971bc357d1c4ccc2e4efbec183" }
+source = { url = "https://github.com/pschlo/pywarden/archive/refs/heads/main.zip" }
 dependencies = [
     { name = "requests" },
 ]
+sdist = { hash = "sha256:03b4691703b5fc5dc2b937b5a28406a17a6fb861114186730e23364ddb7046fa" }
+
+[package.metadata]
+requires-dist = [{ name = "requests", specifier = ">=2.32.5" }]
 
 [[package]]
 name = "requests"
