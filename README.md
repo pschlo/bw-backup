@@ -6,30 +6,25 @@ attachments into the same backup directory.
 ## Requirements
 
 - [uv](https://docs.astral.sh/uv/getting-started/installation/)
+- [Git](https://git-scm.com/downloads)
 - The [Bitwarden CLI](https://bitwarden.com/help/cli/) installed as `bw`
 
-uv manages the Python environment and dependencies. The Bitwarden CLI is a
-separate application and must be installed on the system.
+uv manages the Python environment and dependencies. Git is currently required
+to obtain Pywarden, and the Bitwarden CLI is a separate application that must
+also be installed on the system.
 
 ## Run
 
-Open a terminal in this repository and run:
+Install the requirements above and run:
 
 ```console
-uv run bw-backup
+uvx git+https://github.com/pschlo/bw-backup.git
 ```
 
-On the first run, uv creates `.venv` and installs the locked dependencies. The
-application then asks for the information needed to unlock the vault.
-
-To save the backup under a specific directory:
-
-```console
-uv run bw-backup path/to/backups
-```
-
-Use `uv run bw-backup --help` to see all options, including `--email` and
-`--cli` for supplying the path to the Bitwarden CLI manually.
+uv downloads the application and Python dependencies automatically. The
+application then asks for the information needed to unlock the vault. Pass an
+output directory as an argument to choose where backups are created, or pass
+`--help` to see all options.
 
 Each run creates a timestamped directory containing:
 
@@ -47,26 +42,11 @@ The generated files are unencrypted and may contain passwords, notes, and
 attachments. Store the backup on encrypted storage or encrypt it immediately,
 and securely remove plaintext copies you no longer need.
 
-## Install as a command
-
-To make `bw-backup` available outside the repository:
-
-```console
-uv tool install "bw-backup @ git+https://github.com/pschlo/bw-backup.git"
-bw-backup
-```
-
-The equivalent installation with pip is:
-
-```console
-python -m pip install "bw-backup @ git+https://github.com/pschlo/bw-backup.git"
-bw-backup
-```
-
 ## Development
 
 ```console
-uv sync
+uv sync --locked
+uv run bw-backup
 uv run pytest
 uv run ruff check .
 uv run ruff format --check .
