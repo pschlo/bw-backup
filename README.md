@@ -1,35 +1,77 @@
 # bw-backup
-Small script to back up Bitwarden vault, including attachments
 
+`bw-backup` creates a local JSON backup of a Bitwarden vault and downloads its
+attachments into the same backup directory.
 
+## Requirements
 
-### Getting Started
+- [uv](https://docs.astral.sh/uv/getting-started/installation/)
+- The [Bitwarden CLI](https://bitwarden.com/help/cli/) installed as `bw`
 
-1. Download Bitwarden CLI [here](https://bitwarden.com/download/)
-2. Check if `pip` is available. If not, follow [these](https://pip.pypa.io/en/stable/installation/) steps.
-3. Choose a release [here](https://github.com/pschlo/bw-backup/releases). Under the chosen release, look for an asset `bw_backup-x.x.x.tar.gz`. Copy the link to this asset.
-4. Install bw-backup with `pip install [link to asset]`
-5. Run the backup script with `python -m bw_backup`
+uv manages the Python environment and dependencies. The Bitwarden CLI is a
+separate application and must be installed on the system.
 
-### Optional: Encrypting the Backup
+## Run
 
-* encrypt:
-  * `tar -cf [backup-name].tar [backup-name]`
-  * `gpg --no-symkey-cache -co [backup-name].tar.gpg [backup-name].tar`
-* decrypt:
-  * `gpg --no-symkey-cache -do [backup-name].tar [backup-name].tar.gpg`
-  * `tar -xf [backup-name].tar`
-* clear GPG password cache: `gpg-connect-agent reloadagent /bye`
+Open a terminal in this repository and run:
 
-### Hints for backups with Tails OS
+```console
+uv run bw-backup
+```
 
-* Use standalone pip to avoid having to install it
-* use `7z x` to extract the Bitwarden CLI
-* Use `torify` to run both `pip install` and `python3 -m bw_backup`
+On the first run, uv creates `.venv` and installs the locked dependencies. The
+application then asks for the information needed to unlock the vault.
 
+To save the backup under a specific directory:
 
+```console
+uv run bw-backup path/to/backups
+```
 
-## Motivation
+Use `uv run bw-backup --help` to see all options, including `--email` and
+`--cli` for supplying the path to the Bitwarden CLI manually.
 
-* Official Bitwarden backup guide: [here](https://bitwarden.com/resources/guide-how-to-create-and-store-a-backup-of-your-bitwarden-vault/)
-* Guide written by a Bitwarden user: [here](https://community.bitwarden.com/t/how-to-a-users-guide-to-backing-up-your-bitwarden-vault/44083)
+Each run creates a timestamped directory containing:
+
+```text
+bw-backup_user@example.com_2026-07-19_16-30-00/
+├── export.json
+└── attachments/
+    └── item-id/
+        └── attachment.pdf
+```
+
+## Security
+
+The generated files are unencrypted and may contain passwords, notes, and
+attachments. Store the backup on encrypted storage or encrypt it immediately,
+and securely remove plaintext copies you no longer need.
+
+## Install as a command
+
+To make `bw-backup` available outside the repository:
+
+```console
+uv tool install "bw-backup @ git+https://github.com/pschlo/bw-backup.git"
+bw-backup
+```
+
+The equivalent installation with pip is:
+
+```console
+python -m pip install "bw-backup @ git+https://github.com/pschlo/bw-backup.git"
+bw-backup
+```
+
+## Development
+
+```console
+uv sync
+uv run pytest
+uv run ruff check .
+uv run ruff format --check .
+uv build
+```
+
+The tests use fake vault data and do not invoke `bw`, contact Bitwarden, or
+access a real vault.

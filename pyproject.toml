@@ -4,22 +4,37 @@ build-backend = "hatchling.build"
 
 [project]
 name = "bw-backup"
-version = "1.0.11"
+version = "1.1.0"
 authors = [
-  { name="pschlo", email="author@example.com" },
+  { name = "pschlo", email = "70105856+pschlo@users.noreply.github.com" },
 ]
-description = "Bitwarden Backup CLI"
+description = "Back up a Bitwarden vault, including attachments"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-  "pywarden @ https://github.com/pschlo/pywarden/releases/download/v1.1.6/pywarden-1.1.6.tar.gz"
+  "pywarden @ git+https://github.com/pschlo/pywarden.git@7e47a658653e6f971bc357d1c4ccc2e4efbec183",
+]
+
+[project.scripts]
+bw-backup = "bw_backup.__main__:main"
+
+[dependency-groups]
+dev = [
+  "pytest>=8.4",
+  "ruff>=0.12",
 ]
 
 [tool.hatch.metadata]
 allow-direct-references = true
 
-[tool.hatch.build.targets.sdist]
-# choose here what to include in sdist
-# the wheel will only include src/bw_backup anyway
-# see https://discuss.python.org/t/should-sdists-include-docs-and-tests/14578
-# include = [ ]
+[tool.hatch.build.targets.wheel]
+packages = ["src/bw_backup"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]

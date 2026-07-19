@@ -1,4 +1,11 @@
 __pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+
 /config.*
 /export/
 /dist/
+/build/
+*.egg-info/

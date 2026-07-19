@@ -1,28 +1,39 @@
-from pathlib import Path
-from typing import Protocol, cast
+from __future__ import annotations
+
 import argparse
 import logging
+from collections.abc import Sequence
+from pathlib import Path
 
-from .setup_logging import setup_logging
 from .export import create_export
+from .setup_logging import setup_logging
 
-
-setup_logging(include_packages={'pywarden'})
 log = logging.getLogger(__name__)
 
 
-class Args(Protocol):
-    output_dir: Path | None
-    email: str | None
-    cli: Path | None
+def get_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        prog="bw-backup",
+        description="Back up a Bitwarden vault, including attachments.",
+    )
+    parser.add_argument(
+        "output_dir",
+        type=Path,
+        nargs="?",
+        help="directory in which to create the timestamped backup",
+    )
+    parser.add_argument("--email", help="Bitwarden account email address")
+    parser.add_argument("--cli", type=Path, help="path to the Bitwarden CLI executable")
+    return parser
 
 
-def get_args() -> Args:
-    parser = argparse.ArgumentParser('bw-backup')
-    parser.add_argument('output_dir', type=Path, nargs='?')
-    parser.add_argument('--email', type=str)
-    parser.add_argument('--cli', type=Path)
-    return cast(Args, parser.parse_args())
+def main(argv: Sequence[str] | None = None) -> int:
+    args = get_parser().parse_args(argv)
+    setup_logging(include_packages={"pywarden"})
+    output_dir = create_export(args.output_dir, email=args.email, clipath=args.cli)
+    log.info('Backup complete: "%s"', output_dir)
+    return 0
 
-args = get_args()
-create_export(args.output_dir, email=args.email, clipath=args.cli)
+
+if __name__ == "__main__":
+    raise SystemExit(main())
